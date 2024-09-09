@@ -16,23 +16,23 @@ import java.util.Set;
 public class Message {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @UuidGenerator
     private String id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
-    @NotBlank(message = "Tamanho do texto inválido!")
-    @Size(min = 1, max = 300)
+    @NotBlank
+    @Size(max = 300, message = "It must be max 300 characters")
     private String text;
 
     @CreationTimestamp
     private LocalDate date;
 
-    @OneToMany(mappedBy = "message")
-    private Set<User> likes;
+//    @ManyToMany(mappedBy = "messageList")
+//    private Set<User> likes;
 
-    private Boolean isBlocked;
-
+    //private Boolean isBlocked;
 }
