@@ -6,9 +6,11 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table
@@ -25,14 +27,16 @@ public class Message {
     private User user;
 
     @NotBlank
-    @Size(max = 300, message = "It must be max 300 characters")
+    @Size(max = 300, message = "Max 300 characters")
     private String text;
 
     @CreationTimestamp
-    private LocalDate date;
+    private LocalDateTime date;
 
-//    @ManyToMany(mappedBy = "messageList")
-//    private Set<User> likes;
+    @ManyToMany
+    @JoinTable(name = "likes",
+            joinColumns = @JoinColumn(name = "message_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> likes;
 
-    //private Boolean isBlocked;
 }

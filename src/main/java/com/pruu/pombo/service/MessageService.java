@@ -2,7 +2,6 @@ package com.pruu.pombo.service;
 
 import com.pruu.pombo.exception.PruuException;
 import com.pruu.pombo.model.entity.Message;
-import com.pruu.pombo.model.entity.User;
 import com.pruu.pombo.model.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class MessageService {
     }
 
     public Message findById(String id) throws PruuException {
-        return repository.findById(id).orElseThrow(() -> new PruuException("Usuário não encontrado!"));
+        return repository.findById(id).orElseThrow(() -> new PruuException("Message not found!"));
     }
 
     public List<Message> findAll() {

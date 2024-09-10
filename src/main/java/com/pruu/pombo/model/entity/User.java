@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.validator.constraints.br.CPF;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -25,7 +26,7 @@ public class User {
     private String name;
 
     @NotBlank
-    @Email(message = "O email deve ser válido.")
+    @Email(message = "Email should be valid.")
     @Column(unique = true)
     private String email;
 
@@ -42,15 +43,6 @@ public class User {
     private List<Message> message;
 
     @CreationTimestamp
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
-//    @JsonBackReference
-//    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Message> messages;
-
-//    @ManyToMany
-//    @JoinTable(name = "likes",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "message_id"))
-//    private List<Message> messageList;
 }

@@ -24,7 +24,7 @@ public class UserService {
     }
 
     public User findById(String id) throws PruuException {
-        return repository.findById(id).orElseThrow(() -> new PruuException("Usuário não encontrado!"));
+        return repository.findById(id).orElseThrow(() -> new PruuException("User not found!"));
     }
 
     public List<User> findAll() {
