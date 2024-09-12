@@ -20,7 +20,7 @@ public class MessageController {
     private MessageService service;
 
     @GetMapping
-    public List<Message>findAll() {
+    public List<Message> findAll() {
         List<Message> messages = service.findAll();
         return messages;
     }
@@ -45,6 +45,12 @@ public class MessageController {
     public ResponseEntity<Void> deleteById(@PathVariable String id) throws PruuException {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/like")
+    public ResponseEntity<Void> likeMessage(@RequestParam String userId, @RequestParam String messageId) {
+        service.likeMessage(userId, messageId);
+        return ResponseEntity.ok().build();
     }
 
 }
