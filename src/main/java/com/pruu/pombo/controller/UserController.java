@@ -2,11 +2,11 @@ package com.pruu.pombo.controller;
 
 import com.pruu.pombo.exception.PruuException;
 import com.pruu.pombo.model.entity.User;
+import com.pruu.pombo.model.selector.UserSelector;
 import com.pruu.pombo.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,8 +41,13 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable String id) throws PruuException {
-        service.deleteById(id);
+    public ResponseEntity<Void> delete(@PathVariable String id) throws PruuException {
+        service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/filters")
+    public ResponseEntity<List<User>> filters(@RequestBody UserSelector userSelector) {
+        return ResponseEntity.ok(service.filters(userSelector));
     }
 }

@@ -1,13 +1,10 @@
 package com.pruu.pombo.model.repository;
 
-import com.pruu.pombo.model.entity.Message;
+import com.pruu.pombo.model.entity.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface MessageRepository extends JpaRepository<Message, String>, JpaSpecificationExecutor<Message> {
-    List<Message> findByIsBlockedFalse();
+public interface ReportRepository extends JpaRepository<Report, String>, JpaSpecificationExecutor<Report> {
 }

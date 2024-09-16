@@ -1,19 +1,17 @@
 package com.pruu.pombo.model.entity;
 
+import com.pruu.pombo.model.enums.Reason;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table
 @Data
-public class Message {
+public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -21,22 +19,18 @@ public class Message {
     private String id;
 
     @ManyToOne
+    @JoinColumn(name = "message_id")
+    private Message message;
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotBlank
-    @Size(max = 300, message = "Max 300 characters")
-    private String text;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Reason reason;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    @ManyToMany
-    @JoinTable(name = "likes",
-            joinColumns = @JoinColumn(name = "message_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> likes;
-
-    private boolean isBlocked;
 
 }

@@ -2,12 +2,11 @@ package com.pruu.pombo.controller;
 
 import com.pruu.pombo.exception.PruuException;
 import com.pruu.pombo.model.entity.Message;
-import com.pruu.pombo.model.entity.User;
+import com.pruu.pombo.model.selector.MessageSelector;
 import com.pruu.pombo.service.MessageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,14 +41,25 @@ public class MessageController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable String id) throws PruuException {
-        service.deleteById(id);
+    public ResponseEntity<Void> delete(@PathVariable String id) throws PruuException {
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/like")
-    public ResponseEntity<Void> likeMessage(@RequestParam String userId, @RequestParam String messageId) {
-        service.likeMessage(userId, messageId);
+    public ResponseEntity<Void> likeMessage(@RequestParam String messageId, @RequestParam String userId) throws PruuException {
+        service.likeMessage(messageId, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/filters")
+    public ResponseEntity<List<Message>> filters(@RequestBody MessageSelector messageSelector) {
+        return ResponseEntity.ok(service.filters(messageSelector));
+    }
+
+    @PatchMapping("/block")
+    public ResponseEntity<Void> blockMessage(@RequestParam String userId, @RequestParam String messageId) throws PruuException {
+        service.blockMessage(userId, messageId);
         return ResponseEntity.ok().build();
     }
 
