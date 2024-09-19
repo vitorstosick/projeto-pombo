@@ -17,6 +17,7 @@ public class ReportSelector extends BaseSelector implements Specification<Report
     private String userId;
     private String messageId;
     private String reason;
+    private String status;
     private LocalDateTime startDateCreation;
     private LocalDateTime finishDateCreation;
 
@@ -34,6 +35,10 @@ public class ReportSelector extends BaseSelector implements Specification<Report
 
         if (this.getReason() != null) {
             predicates.add(cb.equal(root.get("reason"), this.getReason()));
+        }
+
+        if (this.getStatus() != null) {
+            predicates.add(cb.equal(root.get("status"), this.getStatus()));
         }
 
         dateFilter(root, cb, predicates, this.getStartDateCreation(), this.getFinishDateCreation(), "createdAt");

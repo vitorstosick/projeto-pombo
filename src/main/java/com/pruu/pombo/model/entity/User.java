@@ -9,6 +9,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.validator.constraints.br.CPF;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -44,5 +45,9 @@ public class User {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference
+    private List<Report> reports;
 
 }

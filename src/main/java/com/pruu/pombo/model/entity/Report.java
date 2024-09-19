@@ -1,6 +1,7 @@
 package com.pruu.pombo.model.entity;
 
 import com.pruu.pombo.model.enums.Reason;
+import com.pruu.pombo.model.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -32,5 +33,9 @@ public class Report {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.PENDING;
 
 }

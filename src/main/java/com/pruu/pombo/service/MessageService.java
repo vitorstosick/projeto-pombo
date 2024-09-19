@@ -1,6 +1,7 @@
 package com.pruu.pombo.service;
 
 import com.pruu.pombo.exception.PruuException;
+import com.pruu.pombo.model.dto.MessageDTO;
 import com.pruu.pombo.model.entity.Message;
 import com.pruu.pombo.model.entity.User;
 import com.pruu.pombo.model.enums.Role;
@@ -36,7 +37,6 @@ public class MessageService {
     }
 
     public List<Message> findAll() {
-
         return messageRepository.findByIsBlockedFalse();
     }
 

@@ -1,5 +1,7 @@
 package com.pruu.pombo.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.pruu.pombo.model.dto.MessageDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -38,5 +40,21 @@ public class Message {
     private List<User> likes;
 
     private boolean isBlocked;
+
+    @OneToMany(mappedBy = "message")
+    @JsonBackReference
+    private List<Report> reports;
+
+    public static MessageDTO toDTO(Message message, Integer likes, Integer reports) {
+        return new MessageDTO(
+                message.getId(),
+                message.getText(),
+                message.isBlocked(),
+                message.getUser().getId(),
+                message.getUser().getName(),
+                likes,
+                reports
+        );
+    }
 
 }
