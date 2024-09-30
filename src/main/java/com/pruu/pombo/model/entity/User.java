@@ -39,15 +39,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
-    @JsonBackReference
-    private List<Message> message;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user")
-    @JsonBackReference
+    @JsonBackReference(value = "user_message")
+    private List<Message> message;
+
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference(value = "user_report")
     private List<Report> reports;
 
 }
