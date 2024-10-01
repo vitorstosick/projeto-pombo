@@ -39,7 +39,7 @@ public class Message {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> likes;
 
-    private boolean isBlocked;
+    private boolean isBlocked = false;
 
     @OneToMany(mappedBy = "message")
     @JsonBackReference

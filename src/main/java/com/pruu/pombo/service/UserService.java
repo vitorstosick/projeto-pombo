@@ -17,6 +17,7 @@ public class UserService {
     private UserRepository repository;
 
     public User save(User newUser) throws PruuException {
+        cpfValidate(newUser);
         return repository.save(newUser);
     }
 
@@ -45,5 +46,13 @@ public class UserService {
             return repository.findAll(userSelector, page).toList();
         }
         return repository.findAll(userSelector);
+    }
+
+    private void cpfValidate(User user) throws PruuException {
+        User existingUser = repository.findByCpf(user.getCpf());
+
+        if (existingUser != null) {
+            throw new PruuException("CPF already registred!");
+        }
     }
 }

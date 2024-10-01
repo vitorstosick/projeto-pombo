@@ -3,5 +3,7 @@ package com.pruu.pombo.model.enums;
 public enum Status {
 
     PENDING,
-    ANALYZED
+    ANALYZED,
+    CONFIRMED,
+    DISMISSED
 }

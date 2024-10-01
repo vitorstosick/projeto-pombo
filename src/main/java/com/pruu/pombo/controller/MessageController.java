@@ -1,6 +1,7 @@
 package com.pruu.pombo.controller;
 
 import com.pruu.pombo.exception.PruuException;
+import com.pruu.pombo.model.dto.MessageDTO;
 import com.pruu.pombo.model.entity.Message;
 import com.pruu.pombo.model.selector.MessageSelector;
 import com.pruu.pombo.service.MessageService;
@@ -61,6 +62,18 @@ public class MessageController {
     public ResponseEntity<Void> blockMessage(@RequestParam String userId, @RequestParam String messageId) throws PruuException {
         service.blockMessage(userId, messageId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/dto")
+    public ResponseEntity<List<MessageDTO>> getAllMessagesReport() {
+        List<MessageDTO> messageDTOs = service.findAllMessagesDTO();
+        return ResponseEntity.ok(messageDTOs);
+    }
+
+    @GetMapping("/summary/{messageId}")
+    public ResponseEntity<MessageDTO> getMessageById(@PathVariable String messageId) throws PruuException {
+        MessageDTO messageDTO = service.findMessageDTOById(messageId);
+        return ResponseEntity.ok(messageDTO);
     }
 
 }

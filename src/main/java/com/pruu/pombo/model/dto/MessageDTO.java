@@ -16,4 +16,5 @@ public class MessageDTO {
     private String username;
     private Integer likes;
     private Integer reports;
+
 }

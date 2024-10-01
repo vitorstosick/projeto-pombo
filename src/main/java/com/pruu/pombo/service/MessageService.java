@@ -3,8 +3,10 @@ package com.pruu.pombo.service;
 import com.pruu.pombo.exception.PruuException;
 import com.pruu.pombo.model.dto.MessageDTO;
 import com.pruu.pombo.model.entity.Message;
+import com.pruu.pombo.model.entity.Report;
 import com.pruu.pombo.model.entity.User;
 import com.pruu.pombo.model.enums.Role;
+import com.pruu.pombo.model.enums.Status;
 import com.pruu.pombo.model.repository.MessageRepository;
 import com.pruu.pombo.model.repository.UserRepository;
 import com.pruu.pombo.model.selector.MessageSelector;
@@ -74,14 +76,27 @@ public class MessageService {
 
     public void blockMessage(String userId, String messageId) throws PruuException {
 
+        User user = userRepository.findById(userId).orElseThrow(() -> new PruuException("User not found."));
+        Message message = messageRepository.findById(messageId).orElseThrow(() -> new PruuException("Message not found."));
+
         this.isAdmin(userId);
 
-        Message message = messageRepository.findById(messageId).orElseThrow(() -> new PruuException("Message not found."));
-        User user = userRepository.findById(userId).orElseThrow(() -> new PruuException("User not found."));
+        List<Report> messageReports = message.getReports();
+        boolean hasAnalyzedReport = false;
 
-        message.setBlocked(!message.isBlocked());
+        for(Report report : messageReports) {
+            if(report.getStatus() == Status.ANALYZED) {
+                hasAnalyzedReport = true;
+                break;
+            }
+        }
 
-        messageRepository.save(message);
+        if(hasAnalyzedReport) {
+            message.setBlocked(true);
+            messageRepository.save(message);
+        } else {
+            throw new PruuException("The message needs at least one proven report");
+        }
     }
 
     private void isAdmin(String userId) throws PruuException {
@@ -91,4 +106,34 @@ public class MessageService {
             throw new PruuException("Not an admin.");
         }
     }
+
+    public List<MessageDTO> findAllMessagesDTO() {
+        List<Message> messages = messageRepository.findByIsBlockedFalse();
+
+        return messages.stream()
+                .map(message -> {
+                    int likeCount = message.getLikes() != null ? message.getLikes().size() : 0;
+
+                    int reportCount = message.getReports() != null ? message.getReports().size() : 0;
+
+                    return Message.toDTO(message, likeCount, reportCount);
+                })
+                .toList();
+    }
+
+    public MessageDTO findMessageDTOById(String messageId) throws PruuException {
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new PruuException("Message not found"));
+
+        if(message.isBlocked()) {
+            throw new PruuException("Blocked by ADMIN");
+        }
+
+        int likeCount = message.getLikes().size();
+
+        int reportCount = message.getReports().size();
+
+        return Message.toDTO(message, likeCount, reportCount);
+    }
+
 }
