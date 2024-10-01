@@ -109,6 +109,5 @@ public class ReportService {
         } else {
             throw new PruuException("Report has already been analyzed.");
         }
-
     }
 }

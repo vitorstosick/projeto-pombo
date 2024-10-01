@@ -17,6 +17,4 @@ public interface ReportRepository extends JpaRepository<Report, String>, JpaSpec
     Integer countByMessage(Message message);
 
     Integer countByMessageAndStatus(Message message, Status status);
-
-    List<Message> findByMessageId(String messageId);
 }
