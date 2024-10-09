@@ -50,5 +50,5 @@ public class User {
     @JsonBackReference(value = "user_report")
     private List<Report> reports;
 
-    
+
 }
