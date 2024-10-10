@@ -4,6 +4,7 @@ import com.pruu.pombo.model.entity.User;
 import com.pruu.pombo.model.enums.Role;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.ConstraintViolationException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,11 @@ public class UserRepositoryTest {
         users.add(user3);
 
         userRepository.saveAll(users);
+    }
+
+    @AfterEach
+    public void tearDown(){
+        userRepository.deleteAll();
     }
 
     @Test
@@ -130,8 +136,8 @@ public class UserRepositoryTest {
     public void testInsertInvalidCpf() {
         User userInvalidEmail = new User();
         userInvalidEmail.setName("User test invalid CPF");
-        userInvalidEmail.setCpf("11122233344"); // CPF fictício
-        userInvalidEmail.setEmail("validmail@mail.com"); // Email inválido
+        userInvalidEmail.setCpf("11122233344");
+        userInvalidEmail.setEmail("validmail@mail.com");
 
         assertThatThrownBy(() -> userRepository.save(userInvalidEmail))
                 .isInstanceOf(TransactionSystemException.class);
@@ -148,8 +154,8 @@ public class UserRepositoryTest {
 
     @Test
     public void testNonExistCpf() {
-        User user = userRepository.findByCpf(null); // CPF inexistente
+        User user = userRepository.findByCpf(null);
 
-        assertThat(user).isNull(); // Verifica se o usuário não foi encontrado
+        assertThat(user).isNull();
     }
 }
