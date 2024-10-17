@@ -29,6 +29,9 @@ public class ReportService {
     @Autowired
     private ReportRepository reportRepository;
 
+    @Autowired
+    private UserService userService;
+
     public Report save(Report newReport) {
         return reportRepository.save(newReport);
     }
@@ -38,26 +41,18 @@ public class ReportService {
     }
 
     public Report findById(String id, String userId) throws PruuException {
-        this.isAdmin(userId);
+        userService.isAdmin(userId);
         return reportRepository.findById(id).orElseThrow(() -> new PruuException("Report not found!"));
     }
 
     public List<Report> findAll(String userId) throws PruuException {
-        this.isAdmin(userId);
+        userService.isAdmin(userId);
         return reportRepository.findAll();
     }
 
     public Report update(Report report, String userId) throws PruuException {
-        this.isAdmin(userId);
+        userService.isAdmin(userId);
         return reportRepository.save(report);
-    }
-
-    private void isAdmin(String userId) throws PruuException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new PruuException("User not found."));
-
-        if (user.getRole() == Role.USER) {
-            throw new PruuException("Not an admin.");
-        }
     }
 
     public List<Report> filters(ReportSelector reportSelector) {
@@ -98,7 +93,7 @@ public class ReportService {
     }
 
     public boolean changeStatusReport(String userId, String reportId) throws PruuException {
-        isAdmin(userId);
+        userService.isAdmin(userId);
 
         Report report = reportRepository.findById(reportId).orElseThrow(() -> new PruuException("Report not found."));
 

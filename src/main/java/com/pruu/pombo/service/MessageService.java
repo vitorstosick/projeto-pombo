@@ -25,6 +25,9 @@ public class MessageService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     public Message save(Message newMessage) throws PruuException {
         return messageRepository.save(newMessage);
     }
@@ -79,7 +82,7 @@ public class MessageService {
         User user = userRepository.findById(userId).orElseThrow(() -> new PruuException("User not found."));
         Message message = messageRepository.findById(messageId).orElseThrow(() -> new PruuException("Message not found."));
 
-        this.isAdmin(userId);
+        userService.isAdmin(userId);
 
         List<Report> messageReports = message.getReports();
         boolean hasAnalyzedReport = false;
@@ -96,14 +99,6 @@ public class MessageService {
             messageRepository.save(message);
         } else {
             throw new PruuException("The message needs at least one proven report");
-        }
-    }
-
-    private void isAdmin(String userId) throws PruuException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new PruuException("User not found."));
-
-        if (user.getRole() == Role.USER) {
-            throw new PruuException("Not an admin.");
         }
     }
 

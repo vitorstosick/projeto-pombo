@@ -54,7 +54,7 @@ public class UserRepositoryTest {
     }
 
     @AfterEach
-    public void tearDown(){
+    public void tearDown() {
         userRepository.deleteAll();
     }
 
@@ -129,17 +129,17 @@ public class UserRepositoryTest {
         userInvalidEmail.setEmail("invalidemail.com");
 
         assertThatThrownBy(() -> userRepository.save(userInvalidEmail))
-                .isInstanceOf(TransactionSystemException.class);
+                .isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     public void testInsertInvalidCpf() {
-        User userInvalidEmail = new User();
-        userInvalidEmail.setName("User test invalid CPF");
-        userInvalidEmail.setCpf("11122233344");
-        userInvalidEmail.setEmail("validmail@mail.com");
+        User userInvalidCpf = new User();
+        userInvalidCpf.setName("User test invalid CPF");
+        userInvalidCpf.setCpf("11122233344");
+        userInvalidCpf.setEmail("validmail@mail.com");
 
-        assertThatThrownBy(() -> userRepository.save(userInvalidEmail))
+        assertThatThrownBy(() -> userRepository.save(userInvalidCpf))
                 .isInstanceOf(TransactionSystemException.class);
     }
 

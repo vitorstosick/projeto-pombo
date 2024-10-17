@@ -2,16 +2,20 @@ package com.pruu.pombo.service;
 
 import com.pruu.pombo.exception.PruuException;
 import com.pruu.pombo.model.entity.User;
+import com.pruu.pombo.model.enums.Role;
 import com.pruu.pombo.model.repository.UserRepository;
 import com.pruu.pombo.model.selector.UserSelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository repository;
@@ -55,4 +59,18 @@ public class UserService {
             throw new PruuException("CPF already registred!");
         }
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return repository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found" + username));
+    }
+
+    public void isAdmin(String userId) throws PruuException {
+        User user = repository.findById(userId).orElseThrow(() -> new PruuException("User not found."));
+
+        if (user.getRole() == Role.USER) {
+            throw new PruuException("Not an admin.");
+        }
+    }
+
 }
